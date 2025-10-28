@@ -168,8 +168,8 @@
         <!-- Header -->
         <div class="card">
             <div class="top">
-                <div>My ID: <span id="myId" class="badge">—</span></div>
-                <div>Room: <span id="curRoom" class="badge">—</span></div>
+                <div>Tên: <span id="myId" class="badge">—</span></div>
+                <div>Phòng: <span id="curRoom" class="badge">—</span></div>
             </div>
         </div>
 
@@ -184,7 +184,7 @@
 
         <!-- Group panel (DUY NHẤT, có mật khẩu) -->
         <div class="card" id="groupPanel" style="display:none">
-            <div class="row"><input id="roomId" placeholder="Room ID (vd: group-001)" /></div>
+            <div class="row"><input id="roomId" placeholder="Tên phòng (vd: group-001)" /></div>
             <div class="row"><input id="roomPass" placeholder="Mật khẩu phòng (để trống nếu không)"
                     autocomplete="new-password" /></div>
             <div class="row">
@@ -354,7 +354,7 @@
                             // join ok -> cập nhật UI như cũ
                             currentRoom = ack.roomId;          // ✅ dùng đúng biến đã khai báo bằng let
                             $("curRoom").textContent = currentRoom;
-                            $("gState").textContent = `Đã vào: ${currentRoom} | Members: ${ack.members.join(", ")}${ack.locked ? " | 🔒" : ""}`;
+                            $("gState").textContent = `Đã vào: ${currentRoom} | Số người trong phòng: ${ack.members.join(", ")}${ack.locked ? " | 🔒" : ""}`;
                             $("composer").style.display = "";
                             thread.innerHTML = "";
                             render({ side: "you", name: "BOT 🤖", text: "Bạn đã tham gia phòng", at: Date.now() });
@@ -415,7 +415,7 @@
             $("btnCreate").addEventListener("click", () => {
                 const rid = $("roomId").value.trim();
                 const pwd = $("roomPass").value; // có thể rỗng
-                if (!rid) { $("gState").textContent = "Nhập Room ID"; return; }
+                if (!rid) { $("gState").textContent = "Nhập tên phòng"; return; }
 
                 socket.emit("room:create", { roomId: rid, password: pwd }, (ack) => {
                     if (!ack?.ok) {
@@ -432,7 +432,7 @@
                     currentRoom = ack.roomId;
                     $("curRoom").textContent = currentRoom;
                     $("gState").textContent =
-                        `Đã tạo & vào: ${currentRoom} | Members: ${ack.members.join(", ")}${ack.locked ? " | 🔒" : ""}`;
+                        `Đã tạo & vào: ${currentRoom} | Số người trong phòng: ${ack.members.join(", ")}${ack.locked ? " | 🔒" : ""}`;
                     $("composer").style.display = "";
                     thread.innerHTML = "";
                     render({ side: "you", name: "BOT 🤖", text: `Bạn đã tạo phòng${ack.locked ? " (🔒)" : ""}`, at: Date.now() });
@@ -454,7 +454,7 @@
             $("btnJoin").addEventListener("click", () => {
                 const rid = $("roomId").value.trim();
                 const pwd = $("roomPass").value;
-                if (!rid) { $("gState").textContent = "Nhập Room ID"; return; }
+                if (!rid) { $("gState").textContent = "Nhập tên phòng"; return; }
 
                 socket.emit("room:join", { roomId: rid, password: pwd }, (ack) => {
                     if (!ack?.ok) {
@@ -469,7 +469,7 @@
 
                     currentRoom = ack.roomId;
                     $("curRoom").textContent = currentRoom;
-                    $("gState").textContent = `Đã vào: ${currentRoom} | Members: ${ack.members.join(", ")}${ack.locked ? " | 🔒" : ""}`;
+                    $("gState").textContent = `Đã vào: ${currentRoom} | Số người trong phòng: ${ack.members.join(", ")}${ack.locked ? " | 🔒" : ""}`;
                     $("composer").style.display = "";
                     thread.innerHTML = "";
                     render({ side: "you", name: "BOT 🤖", text: `Bạn đã vào phòng`, at: Date.now() });
@@ -480,7 +480,7 @@
             $("btnInvite").addEventListener("click", () => {
                 if (!currentRoom) { $("gState").textContent = "Bạn chưa ở phòng nào"; return; }
                 const pid = $("invitePeer").value.trim();
-                if (!pid) { $("gState").textContent = "Nhập ID để mời"; return; }
+                if (!pid) { $("gState").textContent = "Nhập tên để mời"; return; }
                 socket.emit("room:invite", { roomId: currentRoom, peerId: pid }, (ack) => {
                     $("gState").textContent = ack?.ok
                         ? `Đã gửi lời mời tới ${pid}`
