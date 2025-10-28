@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
-    <title>Group Chat (Mono)</title>
+    <title>Chát Chít</title>
     <style>
         :root {
             --bg: #0b0b0b;
@@ -189,12 +189,12 @@
                     autocomplete="new-password" /></div>
             <div class="row">
                 <button id="btnCreate" type="button">Tạo phòng</button>
-                <button id="btnJoin" type="button">Join</button>
+                <button id="btnJoin" type="button">Vào phòng</button>
             </div>
             <div class="row">
                 <input id="invitePeer" placeholder="Mời ID (vd: u456)" />
                 <button id="btnInvite" type="button">Mời</button>
-                <button id="btnLeave" type="button" style="margin-left:auto">Leave</button>
+                <button id="btnLeave" type="button" style="margin-left:auto">Rời phòng</button>
             </div>
             <span id="gState" class="muted"></span>
 
@@ -421,7 +421,7 @@
                     if (!ack?.ok) {
                         if (ack?.error === "ROOM_EXISTS") {
                             // ✅ Chỉ thông báo, KHÔNG tự join
-                            $("gState").textContent = "❗ Phòng đã tồn tại. Hãy dùng nút Join để vào phòng.";
+                            $("gState").textContent = "❗ Phòng đã tồn tại. Hãy dùng nút 'Vào phòng' để vào phòng.";
                         } else {
                             $("gState").textContent = ack?.error || "Tạo phòng lỗi";
                         }
@@ -445,7 +445,7 @@
                 socket.emit("room:exists", { roomId: rid }, (ack) => {
                     if (!ack?.ok) return;
                     $("gState").textContent = ack.exists
-                        ? `Phòng "${rid}" đã tồn tại${ack.locked ? " (🔒)" : ""}. Nhấn Join để vào.`
+                        ? `Phòng "${rid}" đã tồn tại${ack.locked ? " (🔒)" : ""}. Nhấn 'Vào phòng' để vào.`
                         : `Phòng "${rid}" chưa tồn tại. Bạn có thể Tạo mới${$("roomPass").value ? " (sẽ 🔒)" : ""}.`;
                 });
             });
@@ -462,7 +462,7 @@
                             ack?.error === "ALREADY_IN_ROOM" ? "Bạn đang ở phòng này rồi." :
                                 ack?.error === "WRONG_PASSWORD" ? "Sai mật khẩu." :
                                     ack?.error === "ROOM_NOT_FOUND" ? "Phòng không tồn tại." :
-                                        ack?.error || "Join lỗi";
+                                        ack?.error || "Vào phòng lỗi";
                         $("gState").textContent = m;
                         return;
                     }
